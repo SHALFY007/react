@@ -2,16 +2,21 @@ import logo from './logo.svg';
 import React, {useCallback, useEffect, useId, useRef, useState} from "react";
 import './App.css';
 import Message from './components/Message';
-import {Button, Input} from "@mui/material";
+import {Button, Input, List, ListItem} from "@mui/material";
 
 const message = "Message"
 
 
 
 function App() {
-  const id = useId()
   const inputRef = useRef(null)
+  const listRef = useRef(null)
   const [messageList, setMessageList] = useState([]);
+  const [chatList, setChatList] = useState([{id:1, name:'Chat 1'},
+    {id:2, name:'Chat 2'},
+    {id:3, name:'Chat 3'},
+    {id:4, name:'Chat 4'}
+   ])
   const [text, setText] = useState('');
 
   const sendMessage = (e) => {
@@ -24,7 +29,14 @@ function App() {
 
   }
   const messageSend = () => {
+    let g = messageList.map((e, index) => <div className="Message" key={index}>Cообщение: {e.text} было отправлено автором {e.author}</div>)
+    console.log(g)
     return messageList.map((e, index) => <div className="Message" key={index}>Cообщение: {e.text} было отправлено автором {e.author}</div>)
+
+  }
+
+  const showChat =() => {
+    return chatList.map((e) => <ListItem alignItems='center' key={e.id} className="Chat-list-item">{e.name}</ListItem>)
   }
   useEffect((e) => { //Почему в начале выводит?
     inputRef.current?.focus();
@@ -36,10 +48,15 @@ function App() {
     }, 1000)
 
   }, [ messageList, text])
+
   return (
     <div className="App">
+      <List ref={listRef} disablePadding={true}>
+        {showChat()}
+      </List>
       <header className="App-header">
         <Message message={message} />
+
         <div className="Messages">
           {messageSend()}
         </div>
