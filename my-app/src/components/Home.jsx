@@ -1,53 +1,44 @@
 
 import React, {useCallback, useEffect, useId, useRef, useState} from "react";
 import '../App.css';
-
-import {Button, Input, List, ListItem} from "@mui/material";
-import {BrowserRouter, Link, Switch, Route, Routes} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {Button, Input, List, ListItem, Container} from "@mui/material";
 
 
 function Home() {
+    const dispatch = useDispatch()
+    const value = useSelector((state) => state.MessageReducer.id)
+    console.log(value)
+    const messages = useSelector((state) => state.ChatsReducer)
+    let a = messages.find(ctx => ctx.id == value)
+    
+    console.log(a)
+    const qw = useSelector((state) => state.ChatReducer)
+    let st = qw.find(ctx => ctx.id == value)
+    console.log(st)
     const inputRef = useRef(null)
-    const listRef = useRef(null)
     const [messageList, setMessageList] = useState([]);
-    const [chatList, setChatList] = useState([
-        {id: 'profile', name: 'Profile', path: '/profile'},
-        {id:1, name:'Chat 1', path: '/chat1'},
-        {id:2, name:'Chat 2', path: '/chat2'},
-        {id:3, name:'Chat 3', path: '/chat3'},
-        {id:4, name:'Chat 4', path: '/chat4'}
-    ])
     const [text, setText] = useState('');
-
+    
     const sendMessage = (e) => {
         e.preventDefault();
 
         const input = document.querySelector('input')
         console.log(input.value)
-        setText(input.value)
-        setMessageList([...messageList, { text: input.value, author: 'Admin' }])
+        dispatch({type: 'addMessage', author: 'Admin', text: input.value, id: value.id})
+        // св
+        //setMessageList([...messageList, { text: input.value, author: 'Admin' }])
 
     }
     const messageSend = () => {
-        let g = messageList.map((e, index) => <div className="Message" key={index}>Cообщение: {e.text} было отправлено автором {e.author}</div>)
-        console.log(g)
         return messageList.map((e, index) => <div className="Message" key={index}>Cообщение: {e.text} было отправлено автором {e.author}</div>)
 
     }
 
-    const nextStep = (e) => {
-        let target = e.target.id
-        console.log(e.target.id)
-
-        if (target == 'profile') {
-
-        }
-    }
-
-    const showChat =() => {
-        return chatList.map((e) => <ListItem alignItems='center' key={e.id}  id={e.id} onClick={nextStep}>
-            <Link className="Chat-list-item" to={e.path}>{e.name}</Link></ListItem>)
-    }
+    
+    useEffect(() => {
+        setMessageList([...messageList, value])
+      }, [value])
     useEffect((e) => { //Почему в начале выводит?
         inputRef.current?.focus();
         inputRef.current.value = '';
@@ -60,6 +51,7 @@ function Home() {
     }, [ messageList, text])
 
     return (
+        <Container maxWidth="xl"> 
             <div className="Home">
                 <header className="App-header">
 
@@ -75,6 +67,7 @@ function Home() {
 
                 </header>
             </div>
+        </Container>
     );
 }
 

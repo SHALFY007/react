@@ -1,5 +1,6 @@
 // import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import Container from '@mui/material/Container';
 
 function Profile() {
     const dispatch = useDispatch()
@@ -15,7 +16,7 @@ function Profile() {
     return (
 
 
-
+        <Container maxWidth="xl"> 
         <div className={'Profile'}>
             <form action="#" >
                 <input type="radio" id="first" name="checkbox" value="first"  onClick={click}/>
@@ -27,6 +28,7 @@ function Profile() {
             {/*<p>You choose {value}</p>*/}
 
         </div>
+        </Container>
     );
 }
 
